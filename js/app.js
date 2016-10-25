@@ -18,6 +18,14 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x += this.speed * dt;
+
+    // when off canvas, reset position of enemy to move across again
+    if (this.x > 550) {
+        this.x = -100;
+        this.speed = Math.floor(Math.random()*512);
+    }
+
+    checkCollisions(this);
 };
 
 // Draw the enemy on the screen, required method for game
@@ -36,6 +44,22 @@ var Player = function(x, y, speed) {
 };
 
 Player.prototype.update = function() {
+    if (this.y > 380) {
+        this.y = 380;
+    }
+
+    if (this.x > 400) {
+        this.x = 400;
+    }
+
+    if (this.x < 0) {
+        this.x = 0;
+    }
+
+    if (this.y < 0) {
+        this.x = 200;
+        this.y = 380;
+    }
 };
 
 Player.prototype.render = function() {
@@ -63,12 +87,58 @@ Player.prototype.handleInput = function(keyPress) {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
-var enemy = new Enemy(0, 60, 256);
-// var enemy = new Enemy(0, 140, 256);
-// var enemy = new Enemy(0, 220, 256);
+var enemyPosition = [60, 140, 220];
+var enemy;
+
+for (var i = 0; i < 3; i++) {
+    enemy = new Enemy(0, enemyPosition[i], Math.floor(Math.random()*512));
+    allEnemies.push(enemy);
+}
+
 var player = new Player(200, 380, 50);
 
-allEnemies.push(enemy);
+var checkCollisions = function(enemy) {
+    // if (5 < 30 &&
+    //     55 > 20 &&
+    //     5 < 20 &&
+    //     55 > 10) {
+    //     // collision detected!
+    // }
+
+    // if (rect1.x < rect2.x + rect2.width &&
+    //    rect1.x + rect1.width > rect2.x &&
+    //    rect1.y < rect2.y + rect2.height &&
+    //    rect1.height + rect1.y > rect2.y) {
+    //     // collision detected!
+    // }
+
+    if (player.x < enemy.x + 81 &&
+        player.x + 81 > enemy.x &&
+        player.y < enemy.y + 70 &&
+        70 + player.y > enemy.y) {
+        console.log('collision detected!');
+
+        player.x = 200;
+        player.y = 380;
+    }
+
+    // 101 w
+    // 171 h
+
+    // if (player.x + 101 > enemy.x &&
+    //     player.x < enemy.x + 101 &&
+    //     player.y + 171 > enemy.y &&
+    //     player.y < enemy.y + 171) {
+    //     console.log('collision detected!');
+    // }
+
+    // if (player.x + 81 > enemy.x &&
+    //     player.x < enemy.x + 81 &&
+    //     player.y + 71 > enemy.y &&
+    //     player.y < enemy.y + 71) {
+    //     console.log('collision detected!');
+    // }
+};
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
