@@ -22,7 +22,7 @@ Enemy.prototype.update = function(dt) {
     // when off canvas, reset position of enemy to move across again
     if (this.x > 550) {
         this.x = -100;
-        this.speed = Math.floor(Math.random()*512);
+        this.speed = Math.floor(Math.random() * 512);
     }
 
     checkCollisions(this);
@@ -44,6 +44,7 @@ var Player = function(x, y, speed) {
 };
 
 Player.prototype.update = function() {
+    // Prevent player from moving beyond canvas wall boundaries
     if (this.y > 380) {
         this.y = 380;
     }
@@ -56,6 +57,7 @@ Player.prototype.update = function() {
         this.x = 0;
     }
 
+    // Check for player reaching top of canvas and winning the game
     if (this.y < 0) {
         this.x = 200;
         this.y = 380;
@@ -87,57 +89,27 @@ Player.prototype.handleInput = function(keyPress) {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
+
+// position "axes y" where the enemies will are created
 var enemyPosition = [60, 140, 220];
 var enemy;
 
 for (var i = 0; i < 3; i++) {
-    enemy = new Enemy(0, enemyPosition[i], Math.floor(Math.random()*512));
+    enemy = new Enemy(0, enemyPosition[i], Math.floor(Math.random() * 512));
     allEnemies.push(enemy);
 }
 
 var player = new Player(200, 380, 50);
 
+// Check for collision between player and enemies
 var checkCollisions = function(enemy) {
-    // if (5 < 30 &&
-    //     55 > 20 &&
-    //     5 < 20 &&
-    //     55 > 10) {
-    //     // collision detected!
-    // }
-
-    // if (rect1.x < rect2.x + rect2.width &&
-    //    rect1.x + rect1.width > rect2.x &&
-    //    rect1.y < rect2.y + rect2.height &&
-    //    rect1.height + rect1.y > rect2.y) {
-    //     // collision detected!
-    // }
-
-    if (player.x < enemy.x + 81 &&
-        player.x + 81 > enemy.x &&
-        player.y < enemy.y + 70 &&
-        70 + player.y > enemy.y) {
-        console.log('collision detected!');
-
+    if (player.x < enemy.x + 60 &&
+        player.x + 37 > enemy.x &&
+        player.y < enemy.y + 25 &&
+        30 + player.y > enemy.y) {
         player.x = 200;
         player.y = 380;
     }
-
-    // 101 w
-    // 171 h
-
-    // if (player.x + 101 > enemy.x &&
-    //     player.x < enemy.x + 101 &&
-    //     player.y + 171 > enemy.y &&
-    //     player.y < enemy.y + 171) {
-    //     console.log('collision detected!');
-    // }
-
-    // if (player.x + 81 > enemy.x &&
-    //     player.x < enemy.x + 81 &&
-    //     player.y + 71 > enemy.y &&
-    //     player.y < enemy.y + 71) {
-    //     console.log('collision detected!');
-    // }
 };
 
 // This listens for key presses and sends the keys to your
