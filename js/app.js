@@ -22,10 +22,17 @@ Enemy.prototype.update = function(dt) {
     // when off canvas, reset position of enemy to move across again
     if (this.x > 550) {
         this.x = -100;
-        this.speed = randomSpeed();
+        this.speed = 100 + Math.floor(Math.random() * 512);
     }
 
-    checkCollisions(this);
+    // Check for collision between player and enemies
+    if (player.x < this.x + 60 &&
+        player.x + 37 > this.x &&
+        player.y < this.y + 25 &&
+        30 + player.y > this.y) {
+        player.x = 200;
+        player.y = 380;
+    }
 };
 
 // Draw the enemy on the screen, required method for game
@@ -96,24 +103,9 @@ var player = new Player(200, 380, 50);
 var enemy;
 
 enemyPosition.forEach(function(posY) {
-    enemy = new Enemy(0, posY, randomSpeed());
+    enemy = new Enemy(0, posY, 100 + Math.floor(Math.random() * 512));
     allEnemies.push(enemy);
 });
-
-// Check for collision between player and enemies
-function checkCollisions(enemy) {
-    if (player.x < enemy.x + 60 &&
-        player.x + 37 > enemy.x &&
-        player.y < enemy.y + 25 &&
-        30 + player.y > enemy.y) {
-        player.x = 200;
-        player.y = 380;
-    }
-}
-
-function randomSpeed() {
-    return 100 + Math.floor(Math.random() * 512);
-}
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
